@@ -1,25 +1,52 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+
+  const [sites, setSites] = useState([]);
+
+  useEffect(() => {
+    // Define a function to fetch data from the API
+    const fetchData = async () => {
+      try {
+        // Make a GET request to the API endpoint
+        const response = await axios.get('http://localhost:3001/sites');
+
+        // Set the retrieved data in the state
+        setSites(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    // Call the fetchData function when the component mounts
+    fetchData();
+  }, []);
+// async function getAllSites() {
+//   try {
+//     const response = await axios.get('localhost:3001/sites');
+//     console.log(response);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>
+          <h1>Site Data</h1>
+          <ul>
+            {sites.map((site) => (
+                <li key={site._id}>{site.siteName}{site.siteID}</li>
+
+            ))}
+          </ul>
+        </div>
       </header>
     </div>
   );
-}
+};
 
 export default App;
